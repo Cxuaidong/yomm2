@@ -1,0 +1,30 @@
+language: cpp
+
+os:
+  - linux
+  - osx
+
+dist: trusty
+sudo: required
+
+compiler:
+  - clang
+  - gcc
+
+env:
+  - CONFIG=Release
+  - CONFIG=Debug
+
+notifications:
+ email:
+   on_success: change
+   on_failure: always
+
+before_script:
+   - mkdir build
+   - cd build
+   - cmake .. -DCMAKE_CXX_COMPILER=$1 -DCMAKE_BUILD_TYPE=$CONFIG -DYOMM2_ENABLE_TESTS=1
+
+script:
+   - cmake --build . --config $CONFIG
+   - ctest --output-on-failure
